@@ -248,3 +248,4 @@ def a_star(gr, nrSolutiiCautate):
             else:
                 c.append(s)
 a_star(gr, nrSolutiiCautate=len(scopuri))
+#ceva update
