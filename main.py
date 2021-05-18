@@ -150,7 +150,7 @@ with open("data/input1") as f:
         vNume.append(a[0])
         vBuget.append(float(a[1].split("l")[0]))
         for i in a[2:]:
-            routes[linie].append(dictstops[i.replace("\"","").replace("\n","")])
+            routes[linie].append(i.replace("\"","").replace("\n",""))
         linie+=1
         line = f.readline()
 print(dictstops)
@@ -203,49 +203,53 @@ for i in dictstops.keys():
 print(noduri)
 print(len(dictstops))
 
+def rez(linie):
+    start = routes[linie][0]
+    scopuri = routes[linie][1:]
+    viz[dictstops[scopuri[0]]]=1
+    # exemplu de euristica banala (1 daca nu e nod scop si 0 daca este)
+    vect_h = [0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1]
+    viz[dictstops[start]]==1
+    gr = Graph(noduri, m, mp, start, scopuri, vect_h)
+    NodParcurgere.graf = gr;
 
-start = "Hotel Gogonel"
-scopuri = ["Parcul lui Gigel","Albinuta lenesa","Expozitia de bondari","Albinuta lenesa","Piata 3 castraveti"]
-viz[dictstops[scopuri[0]]]=1
-# exemplu de euristica banala (1 daca nu e nod scop si 0 daca este)
-vect_h = [0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1]
-viz[dictstops[start]]==1
-gr = Graph(noduri, m, mp, start, scopuri, vect_h)
-NodParcurgere.graf = gr;
 
+    def a_star(gr, nrSolutiiCautate):
+        # in coada vom avea doar noduri de tip NodParcurgere (nodurile din arborele de parcurgere)
+        c = [NodParcurgere(gr.indiceNod(gr.start), gr.start, None, 0, gr.calculeaza_h(gr.start))]
 
-def a_star(gr, nrSolutiiCautate):
-    # in coada vom avea doar noduri de tip NodParcurgere (nodurile din arborele de parcurgere)
-    c = [NodParcurgere(gr.indiceNod(gr.start), gr.start, None, 0, gr.calculeaza_h(gr.start))]
+        while len(c) > 0:
+            #print("Coada actuala: " + str(c))
+            #input()
+            nodCurent = c.pop(0)
 
-    while len(c) > 0:
-        #print("Coada actuala: " + str(c))
-        #input()
-        nodCurent = c.pop(0)
+            if gr.testeaza_scop(nodCurent) and scopuri.index(nodCurent.info) == 0:
+                viz[dictstops[nodCurent.info]] = 1
+                print("Solutie: ")
+                nodCurent.afisDrum()
+                print("\n----------------\n")
+                gr.start=nodCurent.info
+                c = [NodParcurgere(gr.indiceNod(gr.start), gr.start, None, 0, gr.calculeaza_h(gr.start))]
+                scopuri.pop(0)
+                nrSolutiiCautate -= 1
+                if nrSolutiiCautate == 0:
+                    return
+            lSuccesori = gr.genereazaSuccesori(nodCurent)
+            for s in lSuccesori:
+                i = 0
+                gasit_loc = False
+                for i in range(len(c)):
+                    # diferenta fata de UCS e ca ordonez dupa f
+                    if c[i].f >= s.f:
+                        gasit_loc = True
+                        break;
+                if gasit_loc:
+                    c.insert(i, s)
+                else:
+                    c.append(s)
+    a_star(gr, nrSolutiiCautate=len(scopuri))
+    #ceva update
 
-        if gr.testeaza_scop(nodCurent) and scopuri.index(nodCurent.info) == 0:
-            viz[dictstops[nodCurent.info]] = 1
-            print("Solutie: ")
-            nodCurent.afisDrum()
-            print("\n----------------\n")
-            gr.start=nodCurent.info
-            c = [NodParcurgere(gr.indiceNod(gr.start), gr.start, None, 0, gr.calculeaza_h(gr.start))]
-            scopuri.pop(0)
-            nrSolutiiCautate -= 1
-            if nrSolutiiCautate == 0:
-                return
-        lSuccesori = gr.genereazaSuccesori(nodCurent)
-        for s in lSuccesori:
-            i = 0
-            gasit_loc = False
-            for i in range(len(c)):
-                # diferenta fata de UCS e ca ordonez dupa f
-                if c[i].f >= s.f:
-                    gasit_loc = True
-                    break;
-            if gasit_loc:
-                c.insert(i, s)
-            else:
-                c.append(s)
-a_star(gr, nrSolutiiCautate=len(scopuri))
-#ceva update
+for i in range(len(routes)):
+    print(vNume[i]+" ================================")
+    rez(i)
