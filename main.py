@@ -2,6 +2,8 @@
 def get_keys_from_value(d, val):
     return [k for k, v in d.items() if v == val]
 viz=[0]*21
+mb=[]
+tc=0
 class NodParcurgere:
     graf = None  # static
 
@@ -21,9 +23,26 @@ class NodParcurgere:
             nod = nod.parinte
         return l
 
-    def afisDrum(self):  # returneaza si lungimea drumului
+    def afisDrum(self,tc):  # returneaza si lungimea drumului
         l = self.obtineDrum()
         print(("->").join(l))
+        for i in range(len(l)):
+            if i<len(l)-1:
+                print("->", end="")
+                if tc == startmin or (tc - startmin) % vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1] == 0:
+                    print("0", end=" min ")
+                else:
+                    print((tc-vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1])%vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end=" min ")
+
+                print(vbus[mb[dictstops[l[i]]][dictstops[l[i+1]]]-1],end=" t=")
+                print(vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end="min")
+                tc+=vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1]
+            else:
+                print()
+
+
+
+        #print(l)
         print("Cost: ", self.g)
         return len(l)
 
@@ -197,12 +216,20 @@ for i in range(len(busRoutes)):
             mp[busRoutes[i][j + 1]][busRoutes[i][j]] = vprice[i]
             mp[busRoutes[i][j]][busRoutes[i][j - 1]] = vprice[i]
             mp[busRoutes[i][j - 1]][busRoutes[i][j]] = vprice[i]
+for i in range(len(dictstops)):
+    mb.append([0]*len(dictstops))
+    for j in range(len(dictstops)):
+        if mp[i][j]>0:
+            mb[i][j]=vprice.index(mp[i][j])+1
+        else:
+            mb[i][j]=0
+
 noduri=[]
 for i in dictstops.keys():
     noduri.append(i)
 print(noduri)
 print(len(dictstops))
-
+tc=startmin
 def rez(linie):
     start = routes[linie][0]
     scopuri = routes[linie][1:]
@@ -217,7 +244,7 @@ def rez(linie):
     def a_star(gr, nrSolutiiCautate):
         # in coada vom avea doar noduri de tip NodParcurgere (nodurile din arborele de parcurgere)
         c = [NodParcurgere(gr.indiceNod(gr.start), gr.start, None, 0, gr.calculeaza_h(gr.start))]
-
+        tc = startmin
         while len(c) > 0:
             #print("Coada actuala: " + str(c))
             #input()
@@ -226,7 +253,7 @@ def rez(linie):
             if gr.testeaza_scop(nodCurent) and scopuri.index(nodCurent.info) == 0:
                 viz[dictstops[nodCurent.info]] = 1
                 print("Solutie: ")
-                nodCurent.afisDrum()
+                nodCurent.afisDrum(tc)
                 print("\n----------------\n")
                 gr.start=nodCurent.info
                 c = [NodParcurgere(gr.indiceNod(gr.start), gr.start, None, 0, gr.calculeaza_h(gr.start))]
