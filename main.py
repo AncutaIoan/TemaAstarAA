@@ -26,6 +26,7 @@ class NodParcurgere:
     def afisDrum(self,tc):  # returneaza si lungimea drumului
         l = self.obtineDrum()
         print(("->").join(l))
+        cv=0
         for i in range(len(l)):
             if i<len(l)-1:
                 print("->", end="")
@@ -34,9 +35,18 @@ class NodParcurgere:
                 else:
                     print((tc-vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1])%vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end=" min ")
 
-                print(vbus[mb[dictstops[l[i]]][dictstops[l[i+1]]]-1],end=" t=")
-                print(vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end="min")
-                tc+=vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1]
+                if cv==-1:
+                    print(vbus[mb[dictstops[l[i]]][dictstops[l[i+1]]]-1],end=" t=")
+                    print(vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end="min")
+                    tc+=vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1]
+                else:
+                    print(vbus[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end=" t=")
+                    if cv!=vbus[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1]:
+                        print(tc%vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end="min")
+                    else:
+                        print(vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end="min")
+                    tc += vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1]
+                cv = vbus[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1]
             else:
                 print()
 
