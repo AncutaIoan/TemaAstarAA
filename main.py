@@ -33,7 +33,7 @@ class NodParcurgere:
                 if tc == startmin or (tc - startmin) % vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1] == 0:
                     print("0", end=" min ")
                 else:
-                    print((tc-vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1])%vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end=" min ")
+                    print((tc-vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1])%vStartMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1]+1, end=" min ")
 
                 if cv==-1:
                     print(vbus[mb[dictstops[l[i]]][dictstops[l[i+1]]]-1],end=" t=")
@@ -42,7 +42,7 @@ class NodParcurgere:
                 else:
                     print(vbus[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end=" t=")
                     if cv!=vbus[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1]:
-                        print(tc%vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end="min")
+                        print(vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end="min")
                     else:
                         print(vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1], end="min")
                     tc += vEndMin[mb[dictstops[l[i]]][dictstops[l[i + 1]]] - 1]
