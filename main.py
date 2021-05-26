@@ -138,7 +138,8 @@ i=0
 routes=[]
 busRoutes=[]
 nrbus=0
-with open("data/input1") as f:
+fileName = input('Enter your file name: ')
+with open("data/"+fileName) as f:
     line = f.readline()
     while line.split()[1] != "oameni":
         #print(line)
@@ -289,4 +290,8 @@ def rez(linie):
 
 for i in range(len(routes)):
     print(vNume[i]+" ================================")
-    rez(i)
+    if vBuget[i]>0:
+        rez(i)
+    else:
+        print("Imi pare rau dar nu poti merge :c ")
+
