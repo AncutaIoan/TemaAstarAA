@@ -1,4 +1,7 @@
 # informatii despre un nod din arborele de parcurgere (nu din graful initial)
+import random
+
+
 def get_keys_from_value(d, val):
     return [k for k, v in d.items() if v == val]
 viz=[0]*21
@@ -193,6 +196,7 @@ print(vBuget)
 print(routes)
 print(busRoutes)
 #aici avem matricea de adiacenta
+
 m=[]
 for i in range(countStops):
     m.append([0]*countStops)
@@ -246,7 +250,26 @@ def rez(linie):
     scopuri = routes[linie][1:]
     viz[dictstops[scopuri[0]]]=1
     # exemplu de euristica banala (1 daca nu e nod scop si 0 daca este)
-    vect_h = [0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1]
+    vect_h=[0]*len(dictstops)
+    def banala():
+        for i in range(len(routes)):
+            for j in range(len(routes[i])):
+                vect_h[dictstops[routes[i][j]]]=1
+
+    def eurist1():
+        for i in range(len(routes)):
+            for j in range(len(routes[i])):
+                if i!=0:
+                    vect_h[dictstops[routes[i][j]]]=vect_h[dictstops[routes[i-1][j]]]+1
+                vect_h[dictstops[routes[i][j]]] = 1
+    def badeur():
+        for i in range(len(routes)):
+            for j in range(len(routes[i])):
+                if i!=0:
+                    vect_h[dictstops[routes[i][j]]]=vprice[i*j%len(dictstops)]
+                vect_h[dictstops[routes[i][j]]] = -1
+    badeur()
+
     viz[dictstops[start]]==1
     gr = Graph(noduri, m, mp, start, scopuri, vect_h)
     NodParcurgere.graf = gr;
