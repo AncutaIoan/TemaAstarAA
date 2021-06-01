@@ -333,20 +333,19 @@ def rez(linie):
         for i in range(len(routes)):
             for j in range(len(routes[i])):
                 vect_h[dictstops[routes[i][j]]]=1
-
+    #euristica banala este cea in care pune 1 daca e stare finala(statie la care trebuie sa ne           oprim
     def eurist1():
         for i in range(len(routes)):
             for j in range(len(routes[i])):
-                if i!=0:
-                    vect_h[dictstops[routes[i][j]]]=vect_h[dictstops[routes[i-1][j]]]+1
-                vect_h[dictstops[routes[i][j]]] = 1
+                vect_h[dictstops[routes[i][j]]]=(mb[i][j]+mp[i][j])/2
+    #euristica 2 este cea in care luam valorile din mb(matricea costurilor banesti) si mp ( matricea ponderilor) si le injumatatim
     def badeur():
         for i in range(len(routes)):
             for j in range(len(routes[i])):
                 if i!=0:
                     vect_h[dictstops[routes[i][j]]]=vprice[i*j%len(dictstops)]
                 vect_h[dictstops[routes[i][j]]] = -1
-    badeur()
+    banala()
 
     viz[dictstops[start]]==1
     gr = Graph(noduri, m, mp, start, scopuri, vect_h)
