@@ -245,6 +245,61 @@ for i in dictstops.keys():
 print(noduri)
 print(len(dictstops))
 tc=startmin
+INF = 99999
+V=len(dictstops)
+
+def floydWarshall(graph):
+
+
+    dist = list(map(lambda i: list(map(lambda j: j, i)), graph))
+
+    for k in range(V):
+
+        # pick all vertices as source one by one
+        for i in range(V):
+
+            # Pick all vertices as destination for the
+            # above picked source
+            for j in range(V):
+                # If vertex k is on the shortest path from
+                # i to j, then update the value of dist[i][j]
+                dist[i][j] = min(dist[i][j],
+                                 dist[i][k] + dist[k][j])
+    printSolution(dist)
+
+
+# A utility function to print the solution
+def printSolution(dist):
+    print
+    "Following matrix shows the shortest distances\
+ between every pair of vertices"
+    for i in range(V):
+        for j in range(V):
+            if (dist[i][j] == INF):
+                print
+                "%7s" % ("INF"),
+            else:
+                print
+                "%7d\t" % (dist[i][j]),
+            if j == V - 1:
+                print
+                ""
+graf = []
+
+for i in range(len(dictstops)):
+    graf.append([0]*len(dictstops))
+    for j in range(len(dictstops)):
+        if mp[i][j]!=0:
+            graf[i][j]=mp[i][j]
+        elif i!=j:
+            graf[i][j]=INF
+        else:
+            graf[i][j]=0
+
+floydWarshall(graf)
+
+
+
 def rez(linie):
     start = routes[linie][0]
     scopuri = routes[linie][1:]
@@ -310,11 +365,11 @@ def rez(linie):
                     c.append(s)
     a_star(gr, nrSolutiiCautate=len(scopuri))
     #ceva update
-
+'''
 for i in range(len(routes)):
     print(vNume[i]+" ================================")
     if vBuget[i]>0:
         rez(i)
     else:
         print("Imi pare rau dar nu poti merge :c ")
-
+'''
