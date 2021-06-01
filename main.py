@@ -231,6 +231,7 @@ for i in range(len(busRoutes)):
             mp[busRoutes[i][j + 1]][busRoutes[i][j]] = vprice[i]
             mp[busRoutes[i][j]][busRoutes[i][j - 1]] = vprice[i]
             mp[busRoutes[i][j - 1]][busRoutes[i][j]] = vprice[i]
+#aici facem matricea preturilor
 for i in range(len(dictstops)):
     mb.append([0]*len(dictstops))
     for j in range(len(dictstops)):
@@ -247,6 +248,28 @@ print(len(dictstops))
 tc=startmin
 INF = 99999
 V=len(dictstops)
+
+
+def BFS(start):
+    visited = [False] * V
+    q = [start]
+
+    # Set source as visited
+    visited[start] = True
+
+    while q:
+        vis = q[0]
+
+        # Print current node
+        print(vis, end=' ')
+        q.pop(0)
+
+        # For every adjacent vertex to
+        # the current vertex
+        for i in range(V):
+            if m[vis][i] == 1 and (not visited[i]):
+                q.append(i)
+                visited[i] = True
 
 def floydWarshall(graph):
 
